@@ -43,7 +43,10 @@ determineRootTag = (robot, tagname) ->
     error = handleWebResponse(err, res)
     if error is ""
       tag_alias = JSON.parse(body)
-      promise.resolve(tag_alias[0]["consequent_name"])
+      if tag_alias.length > 0
+        promise.resolve(tag_alias[0]["consequent_name"])
+      else
+        promise.resolve(tagname)
     else
       promise.reject(error)
   return promise.promise
@@ -56,14 +59,16 @@ getPostCount = (robot, tagname, callback) ->
     error = handleWebResponse(err, res)
     if error is ""
       tag = JSON.parse(body)
-      promise.resolve(tag[0]["post_count"])
+      if tag.length > 0
+        promise.resolve(tag[0]["post_count"])
+      else promise.reject("This tag does not exist.")
     else
       promise.reject(error)
   return promise.promise
 
 lookupImage = (robot, tagname, postCount) ->
   promise = q.defer()
-  post = Math.floor(Math.random() * (postCount - 1) + 1)
+  post = Math.floor(Math.random() * (Math.min(100000, postCount) - 1) + 1)
   page = Math.floor(post / 100)
   index = post % 100
   robot.http("http://danbooru.donmai.us/posts.json?limit=100&page=#{page}&tags=#{tagname}")
@@ -72,7 +77,10 @@ lookupImage = (robot, tagname, postCount) ->
     error = handleWebResponse(err, res)
     if error is ""
       image = JSON.parse(body)
-      promise.resolve("http://danbooru.donmai.us#{image[index]['preview_file_url']}")
+      if image.length > 0
+        promise.resolve("http://danbooru.donmai.us#{image[index]['file_url']}")
+      else
+        promise.reject("Failed to load post #{post} which is the #{index} of page #{page}")
     else
       promise.reject(error)
   return promise.promise
