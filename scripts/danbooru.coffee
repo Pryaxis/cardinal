@@ -69,7 +69,9 @@ getPostCount = (robot, tagname, callback) ->
 lookupImage = (robot, tagname, postCount) ->
   promise = q.defer()
   post = Math.floor(Math.random() * (Math.min(100000, postCount) - 1) + 1)
-  page = Math.floor(post / 100)
+  page = 1
+  if post > 100
+    page = Math.floor(post / 100) + 1
   index = post % 100
   robot.http("http://danbooru.donmai.us/posts.json?limit=100&page=#{page}&tags=#{tagname}")
   .headers(Authorization: danbooru_api_basic_auth)
