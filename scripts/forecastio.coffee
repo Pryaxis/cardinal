@@ -35,7 +35,7 @@ handleWebResponse = (err, res) ->
   return failure
 
 googleGeocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json"
-googleApiKey = process.env.GOOGLE_API_KEY ? "AIzaSyDRKokT9dFdSpO6ay7wlid7j9AWfIv5JLs"
+googleApiKey = process.env.GOOGLE_API_KEY ? ""
 lookupLongLatFromAddress = (robot, address) ->
   promise = q.defer()
   robot.http("#{googleGeocodeUrl}?key=#{googleApiKey}&address=#{address}").get() (err, res, body) ->
@@ -51,7 +51,7 @@ lookupLongLatFromAddress = (robot, address) ->
   return promise.promise
 
 forecastIoUrl = "https://api.forecast.io/forecast"
-forecastIoKey = process.env.FORECAST_IO_KEY ? "79f72d503c46fd53de8f1ce0e02ed3fc"
+forecastIoKey = process.env.FORECAST_IO_KEY ? ""
 fetchWeatherFromLongLat = (robot, longitude, latitude) ->
   promise = q.defer()
   robot.http("#{forecastIoUrl}/#{forecastIoKey}/#{latitude},#{longitude}").get() (err, res, body) ->
