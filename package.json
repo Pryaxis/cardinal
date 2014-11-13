@@ -20,7 +20,9 @@
     "hubot-shipit": "^0.1.1",
     "hubot-teamspeak-track": "^1.0.1",
     "hubot-youtube": "^0.1.2",
-    "q": "~1.0.0"
+    "q": "~1.0.0",
+    "underscore": ">= 1.0.0",
+    "clark": "0.0.6"
   },
   "engines": {
     "node": "0.10.x"
