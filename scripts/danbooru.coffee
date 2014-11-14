@@ -26,6 +26,8 @@ module.exports = (robot) ->
       if(multipleTags.length > 1)
         getRandomImageFromTags(robot, multipleTags).then (url) ->
           msg.send(url)
+        .fail (e) ->
+          msg.send("Failed to get random image: #{e}")
       else
         tagname = tagname.replace(/\ /g, "_")
         response = response + "Searching danbooru for an image of #{tagname}\n"
