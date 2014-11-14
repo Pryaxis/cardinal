@@ -4,7 +4,6 @@ danbooru_api_username = process.env.DANBOORU_API_USERNAME ? ""
 danbooru_api_token = process.env.DANBOORU_API_TOKEN ? ""
 if process.env.DANBOORU_ALLOWED_ROOMS
   danbooru_allowed_rooms = process.env.DANBOORU_ALLOWED_ROOMS.split(',')
-  console.log(danbooru_allowed_rooms)
 else
   danbooru_allowed_rooms = []
 
