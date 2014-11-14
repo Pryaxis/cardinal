@@ -1,3 +1,19 @@
+# Description:
+#   Grabs images from e621.net based on provided tags.
+#
+# Dependencies:
+#   "q": "*"
+#
+# Configuration:
+#   FURRY_ROOMS_ALLOWED
+#
+# Commands:
+#   hubot furry me <tags> [rating] - Retrieves an image with the provided tags with an optional rating.
+#
+#
+# Author:
+#   Ijwu
+
 q = require 'q'
 
 if process.env.FURRY_ROOMS_ALLOWED
