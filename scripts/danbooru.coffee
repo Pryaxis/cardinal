@@ -35,7 +35,7 @@ module.exports = (robot) ->
           response = response + "Found #{postCount} posts for #{tagname}\n"
           lookupImage(robot, tagname, postCount)
           .then (imageUrl) ->
-            msg.send(repsonse)
+            msg.send(response)
             msg.send(imageUrl)
           .fail (e) ->
             msg.send("Failed: #{e}")
@@ -57,7 +57,7 @@ module.exports = (robot) ->
         post = Math.floor(Math.random() * (postsCount - 1) + 1)
         lookupPoolImage(robot, posts[post])
         .then (imageUrl) ->
-          msg.send(repsonse)
+          msg.send(response)
           msg.send(imageUrl)
         .fail (e) ->
           msg.send("Failed: #{e}")
