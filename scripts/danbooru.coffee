@@ -1,7 +1,15 @@
 q = require 'q'
 
-danbooru_api_username = process.env.DANBOORU_API_USERNAME ? ""
-danbooru_api_token = process.env.DANBOORU_API_TOKEN ? ""
+if process.env.DANBOORU_API_USERNAME
+  danbooru_api_username = process.env.DANBOORU_API_USERNAME
+else
+  danbooru_api_username = ""
+
+if process.env.DANBOORU_API_TOKEN
+  danbooru_api_token = process.env.DANBOORU_API_TOKEN
+else
+  danbooru_api_token = ""
+
 if process.env.DANBOORU_ALLOWED_ROOMS
   danbooru_allowed_rooms = process.env.DANBOORU_ALLOWED_ROOMS.split(',')
 else
@@ -30,11 +38,11 @@ module.exports = (robot) ->
             msg.send(repsonse)
             msg.send(imageUrl)
           .fail (e) ->
-            msg.send(e)
+            msg.send("Failed: #{e}")
         .fail (e) ->
-          msg.send(e)
+          msg.send("Failed: #{e}")
       .fail (e) ->
-        msg.send(e)
+        msg.send("Failed: #{e}")
   robot.respond /danbooru pool me (.*)/i, (msg) ->
     if msg.message.room in danbooru_allowed_rooms
       response = ""
@@ -52,9 +60,9 @@ module.exports = (robot) ->
           msg.send(repsonse)
           msg.send(imageUrl)
         .fail (e) ->
-          msg.send(e)
+          msg.send("Failed: #{e}")
       .fail (e) ->
-        msg.send(e)
+        msg.send("Failed: #{e}")
 
 handleWebResponse = (err, res) ->
   failure = ""
