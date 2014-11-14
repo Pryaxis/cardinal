@@ -19,35 +19,38 @@ danbooru_api_basic_auth = 'Basic ' + new Buffer(danbooru_api_username + ':' + da
 
 module.exports = (robot) ->
   robot.respond /danbooru image me (.*)/i, (msg) ->
-    console.log(msg.message.room)
-    console.log(msg.envelope.room)
     if msg.message.room in danbooru_allowed_rooms
       response = ""
       tagname = msg.match[1].trim()
-      tagname = tagname.replace(" ", "_")
-      response = response + "Searching danbooru for an image of #{tagname}\n"
-      determineRootTag(robot, tagname)
-      .then (origin_tag) ->
-        response = response + "Resolved #{tagname} to #{origin_tag}\n"
-        tagname = origin_tag
-        getPostCount(robot, origin_tag)
-        .then (postCount) ->
-          response = response + "Found #{postCount} posts for #{tagname}\n"
-          lookupImage(robot, tagname, postCount)
-          .then (imageUrl) ->
-            msg.send(response)
-            msg.send(imageUrl)
+      multipleTags = tagname.split(',')
+      if(multipleTags.length > 1)
+        getRandomImageFromTags(robot, multipleTags).then (url) ->
+          msg.send(url)
+      else
+        tagname = tagname.replace(/\ /g, "_")
+        response = response + "Searching danbooru for an image of #{tagname}\n"
+        determineRootTag(robot, tagname)
+        .then (origin_tag) ->
+          response = response + "Resolved #{tagname} to #{origin_tag}\n"
+          tagname = origin_tag
+          getPostCount(robot, origin_tag)
+          .then (postCount) ->
+            response = response + "Found #{postCount} posts for #{tagname}\n"
+            lookupImage(robot, tagname, postCount)
+            .then (imageUrl) ->
+              msg.send(response)
+              msg.send(imageUrl)
+            .fail (e) ->
+              msg.send("Failed: #{e}")
           .fail (e) ->
             msg.send("Failed: #{e}")
         .fail (e) ->
           msg.send("Failed: #{e}")
-      .fail (e) ->
-        msg.send("Failed: #{e}")
   robot.respond /danbooru pool me (.*)/i, (msg) ->
     if msg.message.room in danbooru_allowed_rooms
       response = ""
       poolname = msg.match[1].trim()
-      poolname = poolname.replace(" ", "_")
+      poolname = poolname.replace(/\ /g, "_")
       response = response + "Searching danbooru for a pool called #{poolname}\n"
       getPoolDetails(robot, poolname)
       .then (posts) ->
@@ -155,4 +158,41 @@ lookupPoolImage = (robot, postId) ->
         promise.reject("This post does not exist.")
     else
       promise.reject(error)
+  return promise.promise
+
+getRandomPost = (robot, tags) ->
+  promise = q.defer()
+  robot.http("http://danbooru.donmai.us/posts/random?tags=#{tags.join('+')}")
+  .headers(Authorization: danbooru_api_basic_auth)
+  .get() (err, res, body) ->
+    if res.statusCode is 302
+      promise.resolve(res['headers']['location'])
+    else
+      promise.reject("Did not get redirected to new image.")
+  return promise.promise
+
+getRandomImageFromTags = (robot, multipleTags) ->
+  promise = q.defer()
+  promises = []
+  for k,v of multipleTags
+    tag = v.trim()
+    tag = tag.replace(/\ /g, "_")
+    p = determineRootTag(robot, tag)
+    promises.push(p)
+
+  q.allSettled(promises).then (results) ->
+    tags = []
+    for index, res of results
+      if res['state'] and res['state'] is "fulfilled"
+        tags.push(res['value'])
+    getRandomPost(robot, tags).then (url) ->
+      postIdRegex = /http:\/\/danbooru\.donmai\.us\/posts\/([0-9]+).*/
+      match = postIdRegex.exec(url)
+      if match
+        lookupPoolImage(robot, match[1]).then (imageUrl) ->
+          promise.resolve(imageUrl)
+        .fail (e) ->
+          promise.reject(e)
+    .fail (e) ->
+      promise.reject(e)
   return promise.promise
