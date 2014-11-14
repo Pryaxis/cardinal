@@ -20,7 +20,7 @@
 #
 #animeUpdateChannel = process.env.ANIME_UPDATE_CHANNEL ? ""
 #
-#module.exports = (robot) ->
+module.exports = (robot) ->
 #  robot.brain.on 'loaded', ->
 #    if(brainLoaded)
 #      return
