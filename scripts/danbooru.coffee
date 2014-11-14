@@ -11,6 +11,8 @@ danbooru_api_basic_auth = 'Basic ' + new Buffer(danbooru_api_username + ':' + da
 
 module.exports = (robot) ->
   robot.respond /danbooru image me (.*)/i, (msg) ->
+    console.log(msg.message.room)
+    console.log(msg.envelope.room)
     if msg.message.room in danbooru_allowed_rooms
       response = ""
       tagname = msg.match[1].trim()
@@ -25,8 +27,8 @@ module.exports = (robot) ->
           response = response + "Found #{postCount} posts for #{tagname}\n"
           lookupImage(robot, tagname, postCount)
           .then (imageUrl) ->
-            response = response + imageUrl
-            msg.send(response)
+            msg.send(repsonse)
+            msg.send(imageUrl)
           .fail (e) ->
             msg.send(e)
         .fail (e) ->
@@ -47,8 +49,8 @@ module.exports = (robot) ->
         post = Math.floor(Math.random() * (postsCount - 1) + 1)
         lookupPoolImage(robot, posts[post])
         .then (imageUrl) ->
-          response = response + imageUrl
-          msg.send(response)
+          msg.send(repsonse)
+          msg.send(imageUrl)
         .fail (e) ->
           msg.send(e)
       .fail (e) ->
