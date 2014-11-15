@@ -62,7 +62,8 @@ getPost = (robot, tags, rating) ->
     if error is ""
       tag = JSON.parse(body)
       if tag.length > 0
-        promise.resolve(tag[0]["sample_url"])
+        #I just didn't want to pass in the msg object. :(
+        promise.resolve(tag[Math.floor(Math.random()*tag.length)]["sample_url"])
       else
         promise.reject("No posts found.")
     else
