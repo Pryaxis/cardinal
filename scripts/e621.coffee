@@ -31,13 +31,15 @@ module.exports = (robot) ->
     rating = "s"
     last = tags.substring(tags.length-1)
     if last in ["e", "q", "s"]
-      tags = tags.substring(0,tags.indexOf(last+",", tags.length-2))
+      tags = tags.substring(0,tags.indexOf(last, tags.length-2))
       rating = last
-    tags = tags.replace(" ", ",")
+    if tags.substring(tags.length-1) is " "
+      tags = tags.substring(0,tags.length-1)
+    msg.send(tags)
     if tags is ""
       msg.send("Format: hubot furry me <tags> [rating]")
       return
-    msg.send("Searching e621 for an image including #{tags} with rating #{rating}")
+    msg.send("Searching e621 for an image including (#{tags}) with rating #{rating}")
     getPost(robot, tags, rating)
     .then (image_url) ->
       msg.send(image_url)
@@ -60,7 +62,8 @@ getPost = (robot, tags, rating) ->
     if error is ""
       tag = JSON.parse(body)
       if tag.length > 0
-        promise.resolve(tag[0]["sample_url"])
+        #I just didn't want to pass in the msg object. :(
+        promise.resolve(tag[Math.floor(Math.random()*tag.length)]["sample_url"])
       else
         promise.reject("No posts found.")
     else
