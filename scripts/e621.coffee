@@ -35,7 +35,6 @@ module.exports = (robot) ->
       rating = last
     if tags.substring(tags.length-1) is " "
       tags = tags.substring(0,tags.length-1)
-    msg.send(tags)
     if tags is ""
       msg.send("Format: hubot furry me <tags> [rating]")
       return
