@@ -10,15 +10,43 @@
 # Commands:
 #   hubot weather me <address, zip code, etc> - Returns the current temperature.
 #   hubot forecast me <address, zip code, etc> - Returns the 5 day forecast for the location.
+#   hubot weather location <location> - saves this location as your location, allowing you to use the other commands without any info
 #
 
 q = require 'q'
 
 NAMES = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+weather_address = {}
+brainLoaded = false
 
 module.exports = (robot) ->
-  robot.respond /weather me (.*)/i, (msg) ->
-    lookupLongLatFromAddress(robot, msg.match[1])
+  robot.brain.on 'loaded', ->
+    if(brainLoaded)
+      return
+    brainLoaded = true
+    weather_address = robot.brain.get("weather_addresses")
+    if not weather_address
+      weather_address = {}
+      robot.brain.save("weather_addresses", weather_address)
+
+  robot.respond /weather location (.+)/i, (msg) ->
+    if brainLoaded
+      weather_address[msg.message.user.id] = msg.match[1]
+      robot.brain.set("weather_address", weather_address)
+      robot.brain.save()
+      msg.send("Stored your location.")
+
+  robot.respond /weather me\s?(.*)/i, (msg) ->
+    address = ""
+    if msg.match[1] and msg.match[1] isnt ""
+      address = msg.match[1]
+    else if msg.message.user.id of weather_address
+      address = weather_address[msg.message.user.id]
+    else
+      msg.send("You must store a location first by using hubot weather location <location>")
+      return
+
+    lookupLongLatFromAddress(robot, address)
     .then (geocode) ->
       geometry = geocode['geometry']
       location = geometry['location']
@@ -30,8 +58,18 @@ module.exports = (robot) ->
         msg.send(e)
     .fail (e) ->
       msg.send(e)
-  robot.respond /forecast me (.*)/i, (msg) ->
-    lookupLongLatFromAddress(robot, msg.match[1])
+
+  robot.respond /forecast me\s?(.*)/i, (msg) ->
+    address = ""
+    if msg.match[1] and msg.match[1] isnt ""
+      address = msg.match[1]
+    else if msg.message.user.id of weather_address
+      address = weather_address[msg.message.user.id]
+    else
+      msg.send("You must store a location first by using hubot weather location <location>")
+      return
+
+    lookupLongLatFromAddress(robot, address)
     .then (geocode) ->
       geometry = geocode['geometry']
       location = geometry['location']

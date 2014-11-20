@@ -1,25 +1,24 @@
-## Description:
-##   Quotes allows you to quote text and save it for later.
-##
-## Dependencies:
-##   None
-##
-## Configuration:
-##   None
-##
-## Commands:
-##   hubot quote add <quote> - Saves the quote
-##   hubot quote read # - Reads the quote stored
-##   hubot quote list - Lists all quotes
-##   hubot quote find <string> - Lists all quotes that contain the search string
-##   hubot quote random - Reads a random quote
+# Description:
+#   Quotes allows you to quote text and save it for later.
+#
+# Dependencies:
+#   None
+#
+# Configuration:
+#   None
+#
+# Commands:
+#   hubot quote add <quote> - Saves the quote
+#   hubot quote read # - Reads the quote stored
+#   hubot quote list - Lists all quotes
+#   hubot quote find <string> - Lists all quotes that contain the search string
+#   hubot quote random - Reads a random quote
 #
 
 brainLoaded = false
 quotes = []
 
 module.exports = (robot) ->
-  scoreKeeper = null
   robot.brain.on 'loaded', ->
     if(brainLoaded)
       return
