@@ -1,3 +1,20 @@
+## Description:
+##   Quotes allows you to quote text and save it for later.
+##
+## Dependencies:
+##   None
+##
+## Configuration:
+##   None
+##
+## Commands:
+##   hubot quote add <quote> - Saves the quote
+##   hubot quote read # - Reads the quote stored
+##   hubot quote list - Lists all quotes
+##   hubot quote find <string> - Lists all quotes that contain the search string
+##   hubot quote random - Reads a random quote
+#
+
 brainLoaded = false
 quotes = []
 
@@ -23,7 +40,7 @@ module.exports = (robot) ->
     quoteIndex = parseInt(msg.match[1])
     if quoteIndex > 0 and quoteIndex <= quotes.length
       quote = quotes[quoteIndex - 1]
-      msg.send("#{quote.who}: #{quote.quote}")
+      msg.send("#{quote.quote} - Added by #{quote.who}")
     else
       msg.send("Invalid quote.")
 
@@ -45,3 +62,10 @@ module.exports = (robot) ->
       msg.send("Found one quote: #{foundQuotes[0]}.")
     else
       msg.send("Did not find any matches (potato).")
+
+  robot.hear /quote random/i, (msg) ->
+    if quotes.length > 0
+      quote = msg.random(quotes)
+      msg.send("#{quote.quote} - Added by #{quote.who}")
+    else
+      msg.send("You have no quotes, nerd. (kappa)")
