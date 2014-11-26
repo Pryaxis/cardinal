@@ -32,7 +32,7 @@ module.exports = (robot) ->
   robot.respond /weather location (.+)/i, (msg) ->
     if brainLoaded
       weather_address[msg.message.user.id] = msg.match[1]
-      robot.brain.set("weather_address", weather_address)
+      robot.brain.set("weather_addresses", weather_address)
       robot.brain.save()
       msg.send("Stored your location.")
 
