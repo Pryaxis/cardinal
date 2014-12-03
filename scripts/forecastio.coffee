@@ -27,7 +27,8 @@ module.exports = (robot) ->
     weather_address = robot.brain.get("weather_addresses")
     if not weather_address
       weather_address = {}
-      robot.brain.save("weather_addresses", weather_address)
+      robot.brain.set("weather_addresses", weather_address)
+      robot.brain.save()
 
   robot.respond /weather location (.+)/i, (msg) ->
     if brainLoaded

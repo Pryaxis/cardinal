@@ -26,7 +26,8 @@ module.exports = (robot) ->
     quotes = robot.brain.get("quotes")
     if not quotes
       quotes = []
-      robot.brain.save("quotes", quotes)
+      robot.brain.set("quotes", quotes)
+      robot.brain.save()
 
   robot.hear /quote add (.*)/i, (msg) ->
     if brainLoaded
