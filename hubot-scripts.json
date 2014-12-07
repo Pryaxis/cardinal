@@ -3,5 +3,6 @@
     "foass.coffee",
     "wits.coffee",
     "zen.coffee",
-    "zombies.coffee"
+    "zombies.coffee",
+    "google.coffee"
 ]
