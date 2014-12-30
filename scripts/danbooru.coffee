@@ -61,9 +61,9 @@ module.exports = (robot) ->
         response = response + "Found #{postsCount} posts for #{poolname}\n"
         post = Math.floor(Math.random() * (postsCount - 1) + 1)
         lookupPoolImage(robot, posts[post])
-        .then (imageUrl) ->
+        .then (post) ->
           msg.send(response)
-          msg.send(imageUrl)
+          msg.send("Image ID: #{post["id"]} - http://danbooru.donmai.us#{post["file_url"]}")
         .fail (e) ->
           msg.send("Failed: #{e}")
       .fail (e) ->
@@ -155,7 +155,7 @@ lookupPoolImage = (robot, postId) ->
     if error is ""
       post = JSON.parse(body)
       if post
-        promise.resolve("http://danbooru.donmai.us#{post["file_url"]}")
+        promise.resolve(post)
       else
         promise.reject("This post does not exist.")
     else
@@ -191,10 +191,12 @@ getRandomImageFromTags = (robot, multipleTags) ->
       postIdRegex = /http:\/\/danbooru\.donmai\.us\/posts\/([0-9]+).*/
       match = postIdRegex.exec(url)
       if match
-        lookupPoolImage(robot, match[1]).then (imageUrl) ->
-          promise.resolve(imageUrl)
+        lookupPoolImage(robot, match[1]).then (post) ->
+          promise.resolve("Image ID: #{post["id"]} - http://danbooru.donmai.us#{post["file_url"]}")
         .fail (e) ->
           promise.reject(e)
+      else
+        promise.reject("Could not match regex for post id.")
     .fail (e) ->
       promise.reject(e)
   return promise.promise
