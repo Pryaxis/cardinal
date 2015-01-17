@@ -4,5 +4,6 @@
     "wits.coffee",
     "zen.coffee",
     "zombies.coffee",
-    "google.coffee"
+    "google.coffee",
+    "fml.coffee"
 ]
