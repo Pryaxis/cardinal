@@ -5,6 +5,7 @@
   "author": "Lucas Nicodemus <shank@shanked.me>",
   "description": "A robot",
   "dependencies": {
+    "clark": "0.0.6",
     "hubot": "^2.9.3",
     "hubot-diagnostics": "0.0.1",
     "hubot-google-images": "^0.1.0",
@@ -18,11 +19,11 @@
     "hubot-rules": "^0.1.0",
     "hubot-scripts": "^2.5.16",
     "hubot-shipit": "^0.1.1",
+    "hubot-slack": "^3.3.0",
     "hubot-teamspeak-track": "^1.0.1",
     "hubot-youtube": "^0.1.2",
     "q": "~1.0.0",
-    "underscore": ">= 1.0.0",
-    "clark": "0.0.6"
+    "underscore": ">= 1.0.0"
   },
   "engines": {
     "node": "0.10.x"
