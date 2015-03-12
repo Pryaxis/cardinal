@@ -24,7 +24,7 @@ else
 
 module.exports = (robot) ->
   robot.respond /furry me (.*)\b/i, (msg) ->
-    if not (msg.envelope.room in furry_allowed_rooms)
+    if not (msg.message.room in furry_allowed_rooms)
       msg.send("Furry is not allowed in this room.")
       return
     tags = msg.match[1]
