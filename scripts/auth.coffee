@@ -24,7 +24,7 @@ module.exports = (robot) ->
   receiveOrg = robot.receive
   robot.receive = (msg) ->
     if (msg.text)
-      if ((msg.text.toLowerCase().substr(0, robot.name.length + 1) is "#{robot.name.toLowerCase()} ") || (msg.text.toLowerCase().substr(0, robot.name.length + 2) is "@#{robot.name.toLowerCase()} "))
+      if ((msg.text.toLowerCase().substr(0, robot.name.length + 1) is "#{robot.name.toLowerCase()} ") or (msg.text.toLowerCase().substr(0, robot.name.length + 2) is "\@#{robot.name.toLowerCase()} "))
         if (msg.user?.id in permissions or msg.user?.id in hubot_admins)
           receiveOrg.bind(robot)(msg)
         else
