@@ -1,7 +1,7 @@
 # stripped down version of https://github.com/dtaniwaki/hubot-privilege/blob/master/src/privilege.coffee
 
 if process.env.HUBOT_ADMINS
-  hubot_admins = process.env.HUBOT_ADMINS
+  hubot_admins = process.env.HUBOT_ADMINS.split(',')
 else
   hubot_admins = []
 
@@ -31,6 +31,7 @@ module.exports = (robot) ->
           robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to use #{robot?.name}.")
 
   robot.topic (msg) ->
+    console.log(msg)
     if (msg.message.user.id not in hubot_admins)
       msg.send("Only admins can change topics.")
       msg.finish()
