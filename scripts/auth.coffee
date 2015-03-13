@@ -24,10 +24,8 @@ module.exports = (robot) ->
   receiveOrg = robot.receive
   robot.receive = (msg) ->
     if (msg.text)
-      if ((msg.text.toLowerCase().substr(0, robot.name.length + 1) is "#{robot.name.toLowerCase()} ") or (msg.text.toLowerCase().substr(0, robot.name.length + 2) is "\@#{robot.name.toLowerCase()} "))
-        if (msg.user?.id in permissions or msg.user?.id in hubot_admins)
-          receiveOrg.bind(robot)(msg)
-        else
+      if (msg.user?.id not in permissions or msg.user?.id not in hubot_admins)
+        if ((msg.text.toLowerCase().substr(0, robot.name.length + 1) is "#{robot.name.toLowerCase()} ") or (msg.text.toLowerCase().substr(0, robot.name.length + 2) is "\@#{robot.name.toLowerCase()} "))
           robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to use #{robot?.name}.")
       else
         receiveOrg.bind(robot)(msg)
