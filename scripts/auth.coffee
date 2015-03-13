@@ -32,9 +32,11 @@ module.exports = (robot) ->
 
   robot.topic (msg) ->
     console.log(msg)
-    if (msg.message.user.id not in hubot_admins)
-      msg.send("Only admins can change topics.")
-      msg.finish()
+    user = robot.brain.userForName(msg.envelope.user.name)
+    if user
+      if (user.id not in permissions)
+        msg.send("Only admins can change topics.")
+        msg.finish()
 
   robot.respond /allow (.+)/i, (msg) ->
     if (msg.message.user.id in hubot_admins)
