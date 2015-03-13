@@ -27,3 +27,4 @@ Cardinal supports two different deployments currently:
 * Ban
 * Spam protection
 * Deployment updates
+* Room archiving (to get around Slack/HipChat 10k history limit)
