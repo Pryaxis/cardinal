@@ -40,10 +40,13 @@ module.exports = (robot) ->
     if (msg.message.user.id in hubot_admins)
       user = robot.brain.userForName(msg.match[1])
       if user
-        permissions.push(user.id)
-        robot.brain.set("permissions", permissions)
-        robot.brain.save()
-        msg.send("#{msg.match[1]} is now allowed to use #{robot.name}.")
+        if (user.id not in permissions)
+          permissions.push(user.id)
+          robot.brain.set("permissions", permissions)
+          robot.brain.save()
+          msg.send("#{msg.match[1]} is now allowed to use #{robot.name}.")
+        else
+          msg.send("#{user.name} is already allowed.")
       else
         msg.send("Could not find a user called #{msg.match[1]}")
     else
