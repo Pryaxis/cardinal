@@ -29,7 +29,7 @@ module.exports = (robot) ->
   receiveOrg = robot.receive
   robot.receive = (msg) ->
     if msg instanceof TopicMessage
-      console.log("TopicMsg: #{msg}")
+      console.log("TopicMsg: #{msg.user}")
       room = msg.user.room
       oldTopic = ''
       if (room.id in topicLocks)
@@ -41,6 +41,7 @@ module.exports = (robot) ->
         fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
         robot.adapter.topic(fake_envelope, oldTopic)
       else
+          robot.send(msg.user, "I have remembered this topic <3")
           topicLocks[room.id] = msg.text
           robot.brain.set("topicLocks", topicLocks)
           robot.brain.save()
