@@ -50,8 +50,13 @@ module.exports = (robot) ->
         post = Math.floor(Math.random() * (postsCount - 1) + 1)
         lookupPoolImage(robot, posts[post])
         .then (post) ->
-          msg.send(response)
-          msg.send("Image ID: #{post["id"]} - http://danbooru.donmai.us#{post["file_url"]}")
+          hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY)
+          url = "http://danbooru.donmai.us#{post["file_url"]}"
+          hmac.update(url)
+          digest = hmac.digest('hex')
+          imgurl = encodeURIComponent(url)
+          proxy_url = "#{host}/#{digest}?url=#{imgurl}"
+          msg.send("Image ID: #{post["id"]} - #{proxy_url}")
         .fail (e) ->
           msg.send("Failed: #{e}")
       .fail (e) ->
