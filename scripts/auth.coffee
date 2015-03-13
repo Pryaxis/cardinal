@@ -6,6 +6,7 @@ else
   hubot_admins = []
 
 permissions = []
+topicLocks = {}
 brainLoaded = false
 
 module.exports = (robot) ->
@@ -14,12 +15,15 @@ module.exports = (robot) ->
       return
     brainLoaded = true
     permissions = robot.brain.get("permissions")
+    topicLocks = robot.brain.get("topicLocks")
+    if not topicLocks
+      topicLocks = {}
+      robot.brain.set("topicLocks", topicLocks)
+      robot.brain.save()
     if not permissions
       permissions = []
       robot.brain.set("permissions", permissions)
       robot.brain.save()
-    else
-      console.log("Permissions: #{permissions}")
 
   receiveOrg = robot.receive
   robot.receive = (msg) ->
@@ -31,12 +35,19 @@ module.exports = (robot) ->
         receiveOrg.bind(robot)(msg)
 
   robot.topic (msg) ->
-    console.log(msg)
+    room = msg.envelope.room.name
+    oldTopic = ''
+    if (room in topicLocks)
+      oldTopic = topicLocks[room]
+
     user = robot.brain.userForName(msg.envelope.user.name)
     if user
-      if (user.id not in permissions)
-        msg.send("Only admins can change topics.")
-        msg.finish()
+      if (user.id in hubot_admins)
+        topicLocks[room] = msg.envelope.room.message.text
+        robot.brain.set("topicLocks", topicLocks)
+        robot.brain.save()
+    fake_envelope = {"user": robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg"), "room":room}
+    robot.adapter.topic(fake_envelope, oldTopic)
 
   robot.respond /allow (.+)/i, (msg) ->
     if (msg.message.user.id in hubot_admins)
