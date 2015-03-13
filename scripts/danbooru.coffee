@@ -18,7 +18,6 @@ else
 
 danbooru_api_basic_auth = 'Basic ' + new Buffer(danbooru_api_username + ':' + danbooru_api_token).toString('base64');
 
-hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY)
 host = process.env.IMAGE_PROXY_HOST or "https://ancient-meadow-2257.herokuapp.com"
 
 module.exports = (robot) ->
@@ -28,6 +27,7 @@ module.exports = (robot) ->
     tagname = msg.match[1].trim()
     multipleTags = tagname.split(',')
     getRandomImageFromTags(robot, multipleTags).then (payload) ->
+      hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY)
       hmac.update(payload.url)
       digest = hmac.digest('hex')
       imgurl = encodeURIComponent(payload.url)
