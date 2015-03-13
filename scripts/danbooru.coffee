@@ -1,4 +1,5 @@
 q = require 'q'
+crypto = require 'crypto'
 
 if process.env.DANBOORU_API_USERNAME
   danbooru_api_username = process.env.DANBOORU_API_USERNAME
@@ -17,37 +18,24 @@ else
 
 danbooru_api_basic_auth = 'Basic ' + new Buffer(danbooru_api_username + ':' + danbooru_api_token).toString('base64');
 
+hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY)
+host = process.env.IMAGE_PROXY_HOST or "https://ancient-meadow-2257.herokuapp.com"
+
 module.exports = (robot) ->
   robot.respond /danbooru image me (.*)/i, (msg) ->
-    if msg.message.room in danbooru_allowed_rooms
-      response = ""
-      tagname = msg.match[1].trim()
-      multipleTags = tagname.split(',')
-      if(multipleTags.length > 1)
-        getRandomImageFromTags(robot, multipleTags).then (url) ->
-          msg.send(url)
-        .fail (e) ->
-          msg.send("Failed to get random image: #{e}")
-      else
-        tagname = tagname.replace(/\ /g, "_")
-        response = response + "Searching danbooru for an image of #{tagname}\n"
-        determineRootTag(robot, tagname)
-        .then (origin_tag) ->
-          response = response + "Resolved #{tagname} to #{origin_tag}\n"
-          tagname = origin_tag
-          getPostCount(robot, origin_tag)
-          .then (postCount) ->
-            response = response + "Found #{postCount} posts for #{tagname}\n"
-            lookupImage(robot, tagname, postCount)
-            .then (imageUrl) ->
-              msg.send(response)
-              msg.send(imageUrl)
-            .fail (e) ->
-              msg.send("Failed: #{e}")
-          .fail (e) ->
-            msg.send("Failed: #{e}")
-        .fail (e) ->
-          msg.send("Failed: #{e}")
+    #if msg.message.room in danbooru_allowed_rooms
+    response = ""
+    tagname = msg.match[1].trim()
+    multipleTags = tagname.split(',')
+    getRandomImageFromTags(robot, multipleTags).then (payload) ->
+      hmac.update(payload.url)
+      digest = hmac.digest('hex')
+      imgurl = encodeURIComponent(payload.url)
+      proxy_url = "#{host}/#{digest}?url=#{imgurl}"
+      msg.send("Image id: #{payload.id} - #{proxy_url}")
+    .fail (e) ->
+      msg.send("Failed to get random image: #{e}")
+
   robot.respond /danbooru pool me (.*)/i, (msg) ->
     if msg.message.room in danbooru_allowed_rooms
       response = ""
@@ -192,7 +180,7 @@ getRandomImageFromTags = (robot, multipleTags) ->
       match = postIdRegex.exec(url)
       if match
         lookupPoolImage(robot, match[1]).then (post) ->
-          promise.resolve("Image ID: #{post["id"]} - http://danbooru.donmai.us#{post["file_url"]}")
+          promise.resolve({"id":"#{post["id"]}", "url":"http://danbooru.donmai.us#{post["file_url"]}"})
         .fail (e) ->
           promise.reject(e)
       else
