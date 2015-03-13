@@ -27,6 +27,11 @@ module.exports = (robot) ->
 
   receiveOrg = robot.receive
   robot.receive = (msg) ->
+    if msg instanceof TopicMessage
+      if msg.user.id not in hubot_admins
+        robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
+        return
+
     if (msg.text)
       if (msg.user?.id not in permissions and msg.user?.id not in hubot_admins)
         if ((msg.text.toLowerCase().substr(0, robot.name.length + 1) is "#{robot.name.toLowerCase()} ") or (msg.text.toLowerCase().substr(0, robot.name.length + 2) is "\@#{robot.name.toLowerCase()} "))
@@ -34,20 +39,20 @@ module.exports = (robot) ->
       else
         receiveOrg.bind(robot)(msg)
 
-  robot.topic (msg) ->
-    room = msg.envelope.room.name
-    oldTopic = ''
-    if (room in topicLocks)
-      oldTopic = topicLocks[room]
-
-    user = robot.brain.userForName(msg.envelope.user.name)
-    if user
-      if (user.id in hubot_admins)
-        topicLocks[room] = msg.envelope.room.message.text
-        robot.brain.set("topicLocks", topicLocks)
-        robot.brain.save()
-    fake_envelope = {"user": robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg"), "room":room}
-    robot.adapter.topic(fake_envelope, oldTopic)
+#  robot.topic (msg) ->
+#    room = msg.envelope.room.name
+#    oldTopic = ''
+#    if (room in topicLocks)
+#      oldTopic = topicLocks[room]
+#
+#    user = robot.brain.userForName(msg.envelope.user.name)
+#    if user
+#      if (user.id in hubot_admins)
+#        topicLocks[room] = msg.envelope.room.message.text
+#        robot.brain.set("topicLocks", topicLocks)
+#        robot.brain.save()
+#    fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
+#    robot.adapter.topic(fake_envelope, oldTopic)
 
   robot.respond /allow (.+)/i, (msg) ->
     if (msg.message.user.id in hubot_admins)
