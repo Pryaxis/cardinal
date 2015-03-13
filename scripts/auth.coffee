@@ -25,34 +25,42 @@ module.exports = (robot) ->
   robot.receive = (msg) ->
     if (msg.text)
       if (msg.text.toLowerCase().substr(0, robot.name.length + 1) is "#{robot.name.toLowerCase()} ")
-        if (msg.user?.name in permissions or msg.user?.name in hubot_admins)
+        if (msg.user?.id in permissions or msg.user?.id in hubot_admins)
           receiveOrg.bind(robot)(msg)
         else
-          robot.send(msg.user, "#{msg.user?.name} does not have permission to use #{robot?.name}.")
+          robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to use #{robot?.name}.")
 
   robot.topic (msg) ->
-    if (msg.message.user.name not in hubot_admins)
+    if (msg.message.user.id not in hubot_admins)
       msg.send("Only admins can change topics.")
       msg.finish()
 
   robot.respond /allow (.+)/i, (msg) ->
-    if (msg.message.user.name in hubot_admins)
-      permissions.push(msg.match[1])
-      robot.brain.set("permissions", permissions)
-      robot.brain.save()
-      msg.send("#{msg.match[1]} is now allowed to use #{robot.name}.")
+    if (msg.message.user.id in hubot_admins)
+      user = robot.brain.userForName(msg.match[1])
+      if user
+        permissions.push(user.id)
+        robot.brain.set("permissions", permissions)
+        robot.brain.save()
+        msg.send("#{msg.match[1]} is now allowed to use #{robot.name}.")
+      else
+        msg.send("Could not find a user called #{msg.match[1]}")
     else
       msg.send("#{msg.message.user.name} is not an admin.  This event has been logged.")
 
   robot.respond /disallow (.+)/i, (msg) ->
-    if (msg.message.user.name in hubot_admins)
-      i = permissions.indexOf(msg.match[1])
-      if (i > -1)
-        permissions.splice(i, 1)
-        robot.brain.set("permissions", permissions)
-        robot.brain.save()
-        msg.send("#{msg.match[1]} is not allowed to use #{robot.name}.")
+    if (msg.message.user.id in hubot_admins)
+      user = robot.brain.userForName(msg.match[1])
+      if user
+        i = permissions.indexOf(user.id)
+        if (i > -1)
+          permissions.splice(i, 1)
+          robot.brain.set("permissions", permissions)
+          robot.brain.save()
+          msg.send("#{user.name} is not allowed to use #{robot.name}.")
+        else
+          msg.send("#{user.name} was not allowed previously.")
       else
-        msg.send("#{msg.match[1]} was not allowed previously.")
+        msg.send("Could not find a user called #{msg.match[1]}")
     else
       msg.send("#{msg.message.user.name} is not an admin.  This event has been logged.")
