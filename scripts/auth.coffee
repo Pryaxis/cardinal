@@ -30,7 +30,7 @@ module.exports = (robot) ->
   robot.receive = (msg) ->
     if msg instanceof TopicMessage
       room = msg.user.room
-      oldTopic = ''
+      oldTopic = 'hubot danbooru image me duck'
       if (room in topicLocks)
         robot.send(msg.user, "Found topic for #{room}: #{topicLocks.room}")
         oldTopic = topicLocks.room
