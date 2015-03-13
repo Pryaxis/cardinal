@@ -29,11 +29,10 @@ module.exports = (robot) ->
   receiveOrg = robot.receive
   robot.receive = (msg) ->
     if msg instanceof TopicMessage
-      console.log("TopicMsg: #{JSON.stringify(msg.user)}")
       room = msg.user.room
       oldTopic = ''
-      if (room.id in topicLocks)
-        oldTopic = topicLocks[room.id]
+      if (room in topicLocks)
+        oldTopic = topicLocks[room]
 
       if msg.user.id not in hubot_admins
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
@@ -42,7 +41,7 @@ module.exports = (robot) ->
         robot.adapter.topic(fake_envelope, oldTopic)
       else
           robot.send(msg.user, "I have remembered this topic <3")
-          topicLocks[room.id] = msg.text
+          topicLocks[room] = msg.text
           robot.brain.set("topicLocks", topicLocks)
           robot.brain.save()
       return
