@@ -29,10 +29,22 @@ module.exports = (robot) ->
   receiveOrg = robot.receive
   robot.receive = (msg) ->
     if msg instanceof TopicMessage
+      console.log("TopicMsg: #{msg}")
+      room = msg.user.room
+      oldTopic = ''
+      if (room.id in topicLocks)
+        oldTopic = topicLocks[room.id]
+
       if msg.user.id not in hubot_admins
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
         msg.finish()
-        return
+        fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
+        robot.adapter.topic(fake_envelope, oldTopic)
+      else
+          topicLocks[room.id] = msg.text
+          robot.brain.set("topicLocks", topicLocks)
+          robot.brain.save()
+      return
 
     if (msg.text)
       if (msg.user?.id not in permissions and msg.user?.id not in hubot_admins)
