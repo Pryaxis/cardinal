@@ -1,6 +1,5 @@
 # stripped down version of https://github.com/dtaniwaki/hubot-privilege/blob/master/src/privilege.coffee
 {Robot, Adapter, EnterMessage, LeaveMessage, TopicMessage} = require 'hubot'
-json = require('json')
 
 if process.env.HUBOT_ADMINS
   hubot_admins = process.env.HUBOT_ADMINS.split(',')
@@ -30,7 +29,7 @@ module.exports = (robot) ->
   receiveOrg = robot.receive
   robot.receive = (msg) ->
     if msg instanceof TopicMessage
-      console.log("TopicMsg: #{json.stringify(msg.user)}")
+      console.log("TopicMsg: #{JSON.stringify(msg.user)}")
       room = msg.user.room
       oldTopic = ''
       if (room.id in topicLocks)
