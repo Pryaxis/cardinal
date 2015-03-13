@@ -1,4 +1,5 @@
 # stripped down version of https://github.com/dtaniwaki/hubot-privilege/blob/master/src/privilege.coffee
+{Robot, Adapter, EnterMessage, LeaveMessage, TopicMessage} = require 'hubot'
 
 if process.env.HUBOT_ADMINS
   hubot_admins = process.env.HUBOT_ADMINS.split(',')
