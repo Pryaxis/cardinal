@@ -32,19 +32,20 @@ module.exports = (robot) ->
       room = msg.user.room
       oldTopic = ''
       if (room in topicLocks)
-        robot.send(msg.user, "Found topic for #{room}: #{topicLocks[room]}")
-        oldTopic = topicLocks[room]
+        robot.send(msg.user, "Found topic for #{room}: #{topicLocks.room}")
+        oldTopic = topicLocks.room
+      else
+        robot.send(msg.user, "Could not find a topic for #{room}")
 
       if msg.user.id not in hubot_admins
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
         msg.finish()
         fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
         console.log(topicLocks)
-        console.log(fake_envelope)
         robot.adapter.topic(fake_envelope, oldTopic)
       else
           robot.send(msg.user, "I have remembered this topic <3")
-          topicLocks[room] = msg.text
+          topicLocks.room = msg.text
           robot.brain.set("topicLocks", topicLocks)
           robot.brain.save()
       return
