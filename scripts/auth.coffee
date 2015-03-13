@@ -31,6 +31,7 @@ module.exports = (robot) ->
     if msg instanceof TopicMessage
       if msg.user.id not in hubot_admins
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
+        msg.finish()
         return
 
     if (msg.text)
