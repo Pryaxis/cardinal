@@ -48,10 +48,7 @@ module.exports = (robot) ->
 
   robot.hear /quote list/i, (msg) ->
     if brainLoaded
-      resp = ""
-      for index of quotes
-        resp += "#{quotes[index].who}: #{quotes[index].quote}\n"
-      msg.send(resp)
+      msg.send("https://tshock-hubot.herokuapp.com:#{process.env.EXPRESS_PORT or process.env.PORT or "8080"}/quotes/")
 
   robot.hear /quote find (.*)/i, (msg) ->
     if brainLoaded
@@ -74,3 +71,6 @@ module.exports = (robot) ->
         msg.send("#{quote.quote} - Added by #{quote.who}")
       else
         msg.send("You have no quotes, nerd. (kappa)")
+
+  robot.router.get '/quotes/?', (req, res) ->
+    res.json (quotes)
