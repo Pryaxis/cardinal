@@ -20,21 +20,31 @@ danbooru_api_basic_auth = 'Basic ' + new Buffer(danbooru_api_username + ':' + da
 
 host = process.env.IMAGE_PROXY_HOST or "https://ancient-meadow-2257.herokuapp.com"
 
+create_hmac = (url) ->
+  hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY or "test")
+  hmac.setEncoding("hex")
+  hmac.write(url)
+  hmac.end()
+  digest = hmac.read('hex')
+  imgurl = encodeURIComponent(url)
+  return "#{host}/#{digest}?url=#{imgurl}"
+
 module.exports = (robot) ->
+  robot.respond /proxy me (.*)/i, (msg) ->
+    if msg.message.room in danbooru_allowed_rooms
+      proxy_url = create_hmac(msg.match[1])
+      msg.send(proxy_url)
+
   robot.respond /danbooru image me (.*)/i, (msg) ->
-    #if msg.message.room in danbooru_allowed_rooms
-    response = ""
-    tagname = msg.match[1].trim()
-    multipleTags = tagname.split(',')
-    getRandomImageFromTags(robot, multipleTags).then (payload) ->
-      hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY)
-      hmac.update(payload.url)
-      digest = hmac.digest('hex')
-      imgurl = encodeURIComponent(payload.url)
-      proxy_url = "#{host}/#{digest}?url=#{imgurl}"
-      msg.send("Image id: #{payload.id} - #{proxy_url}")
-    .fail (e) ->
-      msg.send("Failed to get random image: #{e}")
+    if msg.message.room in danbooru_allowed_rooms
+      response = ""
+      tagname = msg.match[1].trim()
+      multipleTags = tagname.split(',')
+      getRandomImageFromTags(robot, multipleTags).then (payload) ->
+        proxy_url = create_hmac(payload.url)
+        msg.send("Image id: #{payload.id} - #{proxy_url}")
+      .fail (e) ->
+        msg.send("Failed to get random image: #{e}")
 
   robot.respond /danbooru pool me (.*)/i, (msg) ->
     if msg.message.room in danbooru_allowed_rooms
@@ -50,12 +60,8 @@ module.exports = (robot) ->
         post = Math.floor(Math.random() * (postsCount - 1) + 1)
         lookupPoolImage(robot, posts[post])
         .then (post) ->
-          hmac = crypto.createHmac("sha1", process.env.IMAGE_PROXY_KEY)
           url = "http://danbooru.donmai.us#{post["file_url"]}"
-          hmac.update(url)
-          digest = hmac.digest('hex')
-          imgurl = encodeURIComponent(url)
-          proxy_url = "#{host}/#{digest}?url=#{imgurl}"
+          proxy_url = create_hmac(url)
           msg.send("Image ID: #{post["id"]} - #{proxy_url}")
         .fail (e) ->
           msg.send("Failed: #{e}")
