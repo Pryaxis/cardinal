@@ -29,10 +29,10 @@ module.exports = (robot) ->
       return
     tags = msg.match[1]
     rating = "s"
-    last = tags.substring(tags.length-1)
-    if last in ["e", "q", "s"]
-      tags = tags.substring(0,tags.indexOf(last, tags.length-2))
-      rating = last
+    last = tags.substring(tags.length-2)
+    if last in [" e", " q", " s"]
+      tags = tags.substring(0,tags.indexOf(last, tags.length-3))
+      rating = last.substring(1, last.length)
     if tags.substring(tags.length-1) is " "
       tags = tags.substring(0,tags.length-1)
     if tags is ""
