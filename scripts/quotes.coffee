@@ -48,7 +48,7 @@ module.exports = (robot) ->
 
   robot.hear /quote list/i, (msg) ->
     if brainLoaded
-      msg.send("https://tshock-hubot.herokuapp.com:#{process.env.EXPRESS_PORT or process.env.PORT or "8080"}/quotes/")
+      msg.send("https://tshock-hubot.herokuapp.com/quotes/")
 
   robot.hear /quote find (.*)/i, (msg) ->
     if brainLoaded
