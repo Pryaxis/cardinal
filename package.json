@@ -23,7 +23,8 @@
     "hubot-teamspeak-track": "^1.0.1",
     "hubot-youtube": "^0.1.2",
     "q": "^1.0.1",
-    "underscore": ">= 1.0.0"
+    "underscore": ">= 1.0.0",
+    "html-entities":"1.1.2"
   },
   "engines": {
     "node": "0.10.x"
