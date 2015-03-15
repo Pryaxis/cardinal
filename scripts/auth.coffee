@@ -1,7 +1,7 @@
 # stripped down version of https://github.com/dtaniwaki/hubot-privilege/blob/master/src/privilege.coffee
 {Robot, Adapter, EnterMessage, LeaveMessage, TopicMessage} = require 'hubot'
-entities = require('html-entities').AllHtmlEntities;
-entities = new Entities();
+Html5Entities = require('html-entities').Html5Entities
+entities = new Html5Entities()
 
 if process.env.HUBOT_ADMINS
   hubot_admins = process.env.HUBOT_ADMINS.split(',')
@@ -50,7 +50,6 @@ module.exports = (robot) ->
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
         msg.finish()
         fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
-        console.log("*****Old Topic: #{oldTopic}**************")
         robot.adapter.topic(fake_envelope, entities.decode(oldTopic))
       else
           topicLocks[room] = msg.text
