@@ -30,6 +30,9 @@ create_hmac = (url) ->
   return "#{host}/#{digest}?url=#{imgurl}"
 
 module.exports = (robot) ->
+  robot.hear /:jappa:/i, (msg) ->
+    msg.send("http://www.everio-fan.com/wp-content/uploads/2011/09/kappa_image.png")
+
   robot.respond /proxy me (.*)/i, (msg) ->
     if msg.message.room in danbooru_allowed_rooms
       proxy_url = create_hmac(msg.match[1])
