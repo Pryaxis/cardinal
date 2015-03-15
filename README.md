@@ -23,6 +23,7 @@ Cardinal supports two different deployments currently:
 * Google
 * Weather
 * Topic protection
+* Hubot aliases
 
 ## Features Wanted
 
