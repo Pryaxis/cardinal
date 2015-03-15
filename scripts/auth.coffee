@@ -48,7 +48,7 @@ module.exports = (robot) ->
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
         msg.finish()
         fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
-        robot.adapter.topic(fake_envelope, oldTopic)
+        robot.adapter.topic(fake_envelope, encodeURIComponent(oldTopic))
       else
           topicLocks[room] = msg.text
           robot.brain.set("topicLocks", topicLocks)
