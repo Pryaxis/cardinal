@@ -29,7 +29,7 @@ module.exports = (robot) ->
       robot.brain.set("quotes", quotes)
       robot.brain.save()
 
-  robot.hear /quote add (.*)/i, (msg) ->
+  robot.respond /quote add (.*)/i, (msg) ->
     if brainLoaded
       quote = {who: msg.message.user['name'], quote: msg.match[1].trim()}
       quotes.push(quote)
@@ -37,7 +37,7 @@ module.exports = (robot) ->
       robot.brain.save()
       msg.send("Saved quote as quote #{quotes.length}.")
 
-  robot.hear /quote read ([0-9]+)/i, (msg) ->
+  robot.respond /quote read ([0-9]+)/i, (msg) ->
     if brainLoaded
       quoteIndex = parseInt(msg.match[1])
       if quoteIndex > 0 and quoteIndex <= quotes.length
@@ -46,11 +46,11 @@ module.exports = (robot) ->
       else
         msg.send("Invalid quote.")
 
-  robot.hear /quote list/i, (msg) ->
+  robot.respond /quote list/i, (msg) ->
     if brainLoaded
       msg.send("https://tshock-hubot.herokuapp.com/quotes/")
 
-  robot.hear /quote find (.*)/i, (msg) ->
+  robot.respond /quote find (.*)/i, (msg) ->
     if brainLoaded
       foundQuotes = []
       for index of quotes
@@ -64,7 +64,7 @@ module.exports = (robot) ->
       else
         msg.send("Did not find any matches (potato).")
 
-  robot.hear /quote random/i, (msg) ->
+  robot.respond /quote random/i, (msg) ->
     if brainLoaded
       if quotes.length > 0
         quote = msg.random(quotes)
