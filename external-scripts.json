@@ -8,5 +8,6 @@
   "hubot-redis-brain",
   "hubot-rules",
   "hubot-youtube",
-  "hubot-teamspeak-track"
+  "hubot-teamspeak-track",
+  "hubot-rss-reader"
 ]
