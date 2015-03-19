@@ -29,14 +29,14 @@ module.exports = (robot) ->
       update_brain()
 
   robot.respond /add trigger ([a-z0-9\s]+):(.+)/i, (msg) ->
-    if (if msg.user.id in hubot_admins)
+    if (msg.user.id in hubot_admins)
       triggers[msg.match[1]] = msg.match[2]
       update_brain()
       msg.reply("Added '#{msg.match[2]}' for trigger '#{msg.match[1]}'")
       msg.finish()
 
   robot.respond /del trigger ([a-z0-9\s]+)/i, (msg) ->
-    if (if msg.user.id in hubot_admins)
+    if (msg.user.id in hubot_admins)
       delete triggers[msg.match[1]]
       update_brain()
       msg.reply("Deleted trigger '#{msg.match[1]}'")
