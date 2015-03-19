@@ -1,3 +1,8 @@
+if process.env.HUBOT_ADMINS
+  hubot_admins = process.env.HUBOT_ADMINS.split(',')
+else
+  hubot_admins = []
+
 module.exports = (robot) ->
   brainLoaded = false
   triggers = {"test":"This is a trigger"}
@@ -24,16 +29,18 @@ module.exports = (robot) ->
       update_brain()
 
   robot.respond /add trigger ([a-z0-9\s]+):(.+)/i, (msg) ->
-    triggers[msg.match[1]] = msg.match[2]
-    update_brain()
-    msg.reply("Added '#{msg.match[2]}' for trigger '#{msg.match[1]}'")
-    msg.finish()
+    if (if msg.user.id in hubot_admins)
+      triggers[msg.match[1]] = msg.match[2]
+      update_brain()
+      msg.reply("Added '#{msg.match[2]}' for trigger '#{msg.match[1]}'")
+      msg.finish()
 
   robot.respond /del trigger ([a-z0-9\s]+)/i, (msg) ->
-    delete triggers[msg.match[1]]
-    update_brain()
-    msg.reply("Deleted trigger '#{msg.match[1]}'")
-    msg.finish()
+    if (if msg.user.id in hubot_admins)
+      delete triggers[msg.match[1]]
+      update_brain()
+      msg.reply("Deleted trigger '#{msg.match[1]}'")
+      msg.finish()
 
   robot.hear /.+/i, (msg) ->
     pattern = generate_triggers()
