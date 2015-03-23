@@ -61,7 +61,7 @@ module.exports = (robot) ->
         
         if typeof forecast_imminent == 'undefined'
           if typeof forecast_future == 'undefined'
-            return
+            end_result += " No conditions found."
           else
             end_result += " Future: #{forecast_future['summary']}"
         else
