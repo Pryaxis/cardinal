@@ -35,7 +35,7 @@ module.exports = (robot) ->
       weather_address[msg.message.user.id] = msg.match[1]
       robot.brain.set("weather_addresses", weather_address)
       robot.brain.save()
-      msg.send("Stored your location.")
+      msg.send("Cool, we've got your location stored.")
 
   robot.respond /weather me\s?(.*)/i, (msg) ->
     address = ""
@@ -44,7 +44,7 @@ module.exports = (robot) ->
     else if msg.message.user.id of weather_address
       address = weather_address[msg.message.user.id]
     else
-      msg.send("You must store a location first by using hubot weather location <location>")
+      msg.send("You must store a location first by using weather location <location>.")
       return
 
     lookupLongLatFromAddress(robot, address)
@@ -53,8 +53,26 @@ module.exports = (robot) ->
       location = geometry['location']
       fetchWeatherFromLongLat(robot, location['lng'], location['lat'])
       .then (forecast) ->
-        forecast = forecast['currently']
-        msg.send("The temperature for #{geocode['formatted_address']} is #{forecast['temperature']} degrees and feels like #{forecast['apparentTemperature']} degrees.")
+        forecast_now = forecast['currently']
+        forecast_imminent = forecast['minutely']
+        forecast_future = forecast['hourly']
+        
+        end_result = "The temperature for #{geocode['formatted_address']} is #{forecast_now['temperature']}. Feels like #{forecast_now['apparentTemperature']} degrees."
+        
+        if typeof forecast_imminent == 'undefined'
+          if typeof forecast_future == 'undefined'
+            return
+          else
+            end_result += " Future: #{forecast_future['summary']}"
+        else
+          end_result += " Imminently: #{forecast_imminent['summary']}"
+
+        if typeof forecast['alerts'] isnt 'undefined'
+          end_result += " Active warnings and watches:"
+          end_result += " #{alert['title']}." for alert in forecast['alerts']
+
+        msg.send(end_result)
+      
       .fail (e) ->
         msg.send(e)
     .fail (e) ->
@@ -67,7 +85,7 @@ module.exports = (robot) ->
     else if msg.message.user.id of weather_address
       address = weather_address[msg.message.user.id]
     else
-      msg.send("You must store a location first by using hubot weather location <location>")
+      msg.send("You must store a location first by using weather location <location>.")
       return
 
     lookupLongLatFromAddress(robot, address)
