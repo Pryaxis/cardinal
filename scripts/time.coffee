@@ -63,13 +63,13 @@ googleTimezoneUrl = "https://maps.googleapis.com/maps/api/timezone/json"
 googleApiKey = process.env.GOOGLE_API_KEY ? "AIzaSyD6BYFZxFYAipmkVegHzYG_z5pU2c0qBak"
 lookupTimezoneFromLongLat = (robot, long, lat) ->
   promise = q.defer()
-  secondsSinceEpoch = Math.ceil(Date.Now() / 1000)
+  secondsSinceEpoch = Math.ceil(Date.now() / 1000)
   robot.http("#{googleTimezoneUrl}?key=#{googleApiKey}&location=#{lat},#{long}&timestamp=#{secondsSinceEpoch}").get() (err, res, body) ->
     error = handleWebResponse(err, res)
     if error is ""
       try
         time = JSON.parse(body)
-        current = Date.Now()
+        current = Date.now()
         current = current + (time['rawOffset'] * 1000)
         current = current + (time['dstOffset'] * 1000)
         promise.resolve(new Date(current))
