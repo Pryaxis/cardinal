@@ -72,7 +72,7 @@ lookupLongLatFromAddress = (robot, address) ->
   return promise.promise
 
 googleTimezoneUrl = "https://maps.googleapis.com/maps/api/timezone/json"
-googleApiKey = process.env.GOOGLE_API_KEY ? "AIzaSyD6BYFZxFYAipmkVegHzYG_z5pU2c0qBak"
+googleApiKey = process.env.GOOGLE_API_KEY ? ""
 lookupTimezoneFromLongLat = (robot, long, lat) ->
   promise = q.defer()
   secondsSinceEpoch = Math.ceil(Date.now() / 1000)
