@@ -1,5 +1,5 @@
 # Description:
-#   ForecastIO allows the users to look up the current weather via Forecast.io
+#   Time allows you to get the local time for any location on Earth (tm)
 #
 # Dependencies:
 #   q
@@ -75,19 +75,6 @@ lookupTimezoneFromLongLat = (robot, long, lat) ->
         promise.resolve(new Date(current))
       catch
         promise.reject("Failed to lookup timezone via Timezone.")
-    else
-      q.reject(error)
-  return promise.promise
-
-forecastIoUrl = "https://api.forecast.io/forecast"
-forecastIoKey = process.env.FORECAST_IO_KEY ? ""
-fetchWeatherFromLongLat = (robot, longitude, latitude) ->
-  promise = q.defer()
-  robot.http("#{forecastIoUrl}/#{forecastIoKey}/#{latitude},#{longitude}").get() (err, res, body) ->
-    error = handleWebResponse(err, res)
-    if error is ""
-      forecast = JSON.parse(body)
-      promise.resolve(forecast)
     else
       q.reject(error)
   return promise.promise
