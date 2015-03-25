@@ -5,7 +5,7 @@ else
 
 module.exports = (robot) ->
   brainLoaded = false
-  triggers = {"test":"This is a trigger"}
+  triggers = {}
 
   update_brain = () ->
     robot.brain.set("triggers", triggers)
@@ -49,3 +49,6 @@ module.exports = (robot) ->
       if triggersHeard and triggersHeard.length > 0
         for trig in triggersHeard
           msg.reply(triggers[trig])
+  
+  robot.router.get '/triggers/?', (req, res) ->
+    res.json (triggers)
