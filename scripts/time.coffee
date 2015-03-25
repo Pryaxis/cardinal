@@ -29,7 +29,19 @@ module.exports = (robot) ->
       location = geometry['location']
       lookupTimezoneFromLongLat(robot, location['lng'], location['lat'])
       .then (time) ->
-        msg.send("The time in #{geocode['formatted_address']} is #{time.toString()}.")
+        hour = time.getUTCHours()
+        amPm = "AM"
+
+        if (hour is 12)
+          amPm = "PM"
+        if (hour > 12)
+          hour = hour - 12
+          amPm = "PM"
+
+        if (hour is 0)
+          hour = 12
+
+        msg.send("The time in #{geocode['formatted_address']} is #{hour}:#{time.getUTCMinutes()} #{amPm} #{time.getUTCMonth() + 1}/#{time.getUTCDate()}/#{time.getUTCFullYear()}.")
       .fail (e) ->
         msg.send(e)
     .fail (e) ->
