@@ -77,4 +77,4 @@ checkReminders = (robot) ->
       reminders.splice(k, 1)
       robot.brain.set("reminders", reminders)
       robot.brain.save()
-  setTimeout (-> checkReminders(robot)), 5000
+  setTimeout((-> checkReminders(robot)), 5000)
