@@ -65,7 +65,7 @@ checkReminders = (robot) ->
       time = Date.parse(v.time)
       if time <= now.getTime()
         user = robot.brain.userForId(v.uid)
-        robot.send(v.uid, "#{user.mention_name ? user.name}: I am reminding you to '#{v.reminder}")
+        robot.send({'room': user.name}, "#{user.mention_name ? user.name}: I am reminding you to '#{v.reminder}")
         reminders.splice(k, 1)
         robot.brain.set("reminders", reminders)
         robot.brain.save()
