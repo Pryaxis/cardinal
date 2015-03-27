@@ -78,3 +78,4 @@ checkReminders = (robot) ->
       robot.brain.set("reminders", reminders)
       robot.brain.save()
   setTimeout((-> checkReminders(robot)), 5000)
+  
