@@ -107,9 +107,9 @@ module.exports = (robot) ->
     else
       msg.send("#{msg.message.user.name} is not an admin.  This event has been logged.")
 
-  robot.respond /alias (rem|add) (.+)/i, (msg) ->
+  robot.respond /alias (remove|add) (.+)/i, (msg) ->
     if (msg.message.user.id in hubot_admins)
-      if (msg.match[1].toLowerCase() is "rem")
+      if (msg.match[1].toLowerCase() is "remove")
         index = aliases.indexOf(msg.match[2].toLowerCase())
         if (index > -1)
           aliases.splice(index, 1)
