@@ -26,7 +26,7 @@ module.exports = (robot) ->
       reminders = []
       robot.brain.set("reminders", reminders)
       robot.brain.save()
-    setTimeout(checkReminders, 1000)
+    setTimeout((-> checkReminders(robot)), 5000)
 
   robot.respond /remind me in (\d+) (minute(s?))? to (.+)/i, (msg) ->
     if brainLoaded
