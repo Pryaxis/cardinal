@@ -59,7 +59,7 @@ checkReminders = () ->
   #console.log("Running reminder checks")
   now = new Date()
   for v, k in reminders
-    try
+    # try
       time = Date.parse(v.time)
       if time <= now.getTime()
         user = robot.brain.userForId(v.uid)
@@ -69,10 +69,10 @@ checkReminders = () ->
         reminders.splice(k, 1)
         robot.brain.set("reminders", reminders)
         robot.brain.save()
-    catch e
-      console.error(e)
-      console.log("Removing entry #{k}")
-      reminders.splice(k, 1)
-      robot.brain.set("reminders", reminders)
-      robot.brain.save()
+    # catch e
+      # console.error(e)
+      # console.log("Removing entry #{k}")
+      # reminders.splice(k, 1)
+      # robot.brain.set("reminders", reminders)
+      # robot.brain.save()
   setTimeout(checkReminders, 1000)
