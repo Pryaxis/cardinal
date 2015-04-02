@@ -1,1 +1,1 @@
-web: bin/hubot -a $ADAPTER -n hubot
+web: bin/hubot --adapter slack -n hubot
