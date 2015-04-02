@@ -20,7 +20,6 @@
 
 
 _ = require('underscore')
-clark = require('clark')
 querystring = require('querystring')
 ScoreKeeper = require('./scorekeeper')
 brainLoaded = false
@@ -113,7 +112,6 @@ module.exports = (robot) ->
 
     if(msg.match[1] == "top")
       graphSize = Math.min(tops.length, Math.min(amount, 20))
-      message.splice(0, 0, clark(_.first(_.pluck(tops, "score"), graphSize)))
 
     msg.send message.join("\n")
 

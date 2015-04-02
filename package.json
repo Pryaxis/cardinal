@@ -5,7 +5,6 @@
   "author": "Lucas Nicodemus <shank@shanked.me>",
   "description": "A robot",
   "dependencies": {
-    "clark": "0.0.6",
     "coffee-script": "^1.9.1",
     "html-entities": "1.1.2",
     "hubot": "^2.9.3",
@@ -31,7 +30,4 @@
   "engines": {
     "node": "0.10.x"
   },
-  "scripts": {
-    "preinstall": "npm install clark"
-  }
 }
