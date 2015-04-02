@@ -110,9 +110,6 @@ module.exports = (robot) ->
     for i in [0..tops.length-1]
       message.push("#{i+1}. #{tops[i].name} : #{tops[i].score}")
 
-    if(msg.match[1] == "top")
-      graphSize = Math.min(tops.length, Math.min(amount, 20))
-
     msg.send message.join("\n")
 
   robot.router.get "/hubot/normalize-points", (req, res) ->
