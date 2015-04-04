@@ -9,6 +9,5 @@
   "hubot-rules",
   "hubot-youtube",
   "hubot-teamspeak-track",
-  "hubot-rss-reader",
-  "hubot-sentimental"
+  "hubot-rss-reader"
 ]
