@@ -14,7 +14,7 @@
     "hubot-help": "^0.1.1",
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-hipchat": "^2.7.5",
-    "hubot-plusplus": "^1.0.1",
+    "hubot-plusplus": "^1.1.5",
     "hubot-pugme": "^0.1.0",
     "hubot-redis-brain": "0.0.2",
     "hubot-rss-reader": "^0.6.5",
