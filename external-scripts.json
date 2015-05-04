@@ -12,5 +12,6 @@
   "hubot-rss-reader",
   "hubot-plusplus",
   "hubot-business-cat",
-  "hubot-ambush"
+  "hubot-ambush",
+  "hubot-seen"
 ]
