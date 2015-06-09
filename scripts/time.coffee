@@ -30,6 +30,7 @@ module.exports = (robot) ->
       lookupTimezoneFromLongLat(robot, location['lng'], location['lat'])
       .then (time) ->
         hour = time.getUTCHours()
+        minutes = time.getUTCMinutes()
         amPm = "AM"
 
         if (hour is 12)
@@ -40,8 +41,11 @@ module.exports = (robot) ->
 
         if (hour is 0)
           hour = 12
+          
+        if (minutes < 10)
+          minutes = "0" + minutes;
 
-        msg.send("The time in #{geocode['formatted_address']} is #{hour}:#{time.getUTCMinutes()} #{amPm} #{time.getUTCMonth() + 1}/#{time.getUTCDate()}/#{time.getUTCFullYear()}.")
+        msg.send("The time in #{geocode['formatted_address']} is #{hour}:#{minutes} #{amPm} #{time.getUTCMonth() + 1}/#{time.getUTCDate()}/#{time.getUTCFullYear()}.")
       .fail (e) ->
         msg.send(e)
     .fail (e) ->
