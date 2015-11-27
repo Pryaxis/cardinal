@@ -49,7 +49,7 @@ module.exports = (robot) ->
       if msg.user.id not in hubot_admins
         robot.send(msg.user, "#{msg.user?.name}:#{msg.user?.id} does not have permission to set topics.")
         msg.finish()
-        fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME or "nicatrontg")}
+        fake_envelope = {room: room, user: robot.brain.userForName(process.env.ADMIN_TOPIC_NAME)}
         robot.adapter.topic(fake_envelope, entities.decode(oldTopic))
       else
           topicLocks[room] = msg.text
