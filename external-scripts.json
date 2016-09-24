@@ -19,5 +19,6 @@
   "hubot-4chan",
   "hubot-iss",
   "hubot-trollbot",
-  "hubot-outofcontext"
+  "hubot-outofcontext",
+  "hubot-markov"
 ]
