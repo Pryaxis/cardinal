@@ -14,5 +14,6 @@
   "hubot-business-cat",
   "hubot-ambush",
   "hubot-seen",
-  "hubot-google"
+  "hubot-google",
+  "hubot-xkcd"
 ]
