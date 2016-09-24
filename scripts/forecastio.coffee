@@ -131,7 +131,7 @@ lookupLongLatFromAddress = (robot, address) ->
       q.reject(error)
   return promise.promise
 
-forecastIoUrl = "https://api.forecast.io/forecast"
+forecastIoUrl = "https://api.darksky.net/forecast"
 forecastIoKey = process.env.FORECAST_IO_KEY ? ""
 fetchWeatherFromLongLat = (robot, longitude, latitude) ->
   promise = q.defer()
