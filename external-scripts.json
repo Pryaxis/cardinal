@@ -17,5 +17,6 @@
   "hubot-google",
   "hubot-xkcd",
   "hubot-4chan",
-  "hubot-iss"
+  "hubot-iss",
+  "hubot-trollbot"
 ]
