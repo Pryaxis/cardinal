@@ -8,9 +8,6 @@ Cardinal is a chat bot built on the [Hubot][hubot] framework. It was initially g
 
 ## Active Deployments
 
-Cardinal supports two different deployments currently:
-
-* The Nyx Studios internal HipChat (as Cardinal System, invocation is @hubot)
 * The TShock for Terraria Slack (as Maka, invocation is @maka)
 
 ## Active Plugins
