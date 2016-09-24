@@ -19,6 +19,7 @@
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-hipchat": "^2.12.0",
     "hubot-iss": "^1.3.0",
+    "hubot-outofcontext": "^1.0.1",
     "hubot-plusplus": "^1.1.5",
     "hubot-pugme": "^0.1.0",
     "hubot-redis-brain": "0.0.2",
