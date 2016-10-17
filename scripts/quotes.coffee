@@ -71,15 +71,6 @@ module.exports = (robot) ->
         msg.send("#{quote.quote} - Added by #{quote.who}")
       else
         msg.send("You have no quotes, nerd. (kappa)")
-        
-  robot.respond /quote delete ([0-9]+)/i, (msg) ->
-    if braidLoaded
-      quoteIndex = parseInt(msg.match[1])
-      if (quoteIndex > 0 and quoteIndex <= quotes.length
-          quotes.splice(quoteIndex - 1, 1)
-          msg.send("Removed quote #{quoteIndex}")
-      else
-          msg.send("Invalid quote.")
 
   robot.router.get '/quotes/?', (req, res) ->
     res.json (quotes)
