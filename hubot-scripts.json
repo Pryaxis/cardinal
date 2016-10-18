@@ -3,5 +3,7 @@
     "wits.coffee",
     "zen.coffee",
     "google.coffee",
-    "fml.coffee"
+    "fml.coffee",
+    "fortune.coffee",
+    "factoid.coffee"
 ]
