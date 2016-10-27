@@ -72,7 +72,7 @@ module.exports = (robot) ->
       else
         msg.send("You have no quotes, nerd. (kappa)")
 
-  robot.respond /quote delete([0-9]+)/i, (msg) ->
+  robot.respond /quote delete ([0-9]+)/i, (msg) ->
     if brainLoaded
       quoteIndex = parseInt(msg.match[1])
       if (quoteIndex > 0 and quoteIndex <= quotes.length)
