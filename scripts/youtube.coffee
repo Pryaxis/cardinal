@@ -45,10 +45,10 @@ getPost = (robot, search) ->
     .get() (err, res, body) ->
       error = handleWebResponse(err, res)
       if error is ""
-        search = search.replace /\"\"([^\"]+)\"/g, "\"'$1'"
-        search = JSON.parse(body)
+        search = body.replace /\"\"([^\"]+)\"/g, "\"'$1'"
+        json = JSON.parse(search)
         if search.length > 0
-          promise.resolve(search["items"][0])
+          promise.resolve(json["items"][0])
         else
           promise.reject("No videos found.")
       else
