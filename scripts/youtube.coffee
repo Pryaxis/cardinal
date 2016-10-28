@@ -37,15 +37,19 @@ handleWebResponse = (err, res) ->
 
 getPost = (robot, search) ->
   promise = q.defer()
-  robot.http("https://www.googleapis.com/youtube/v3/search?part=snippet&q=#{search}")
-  .get() (err, res, body) ->
-    error = handleWebResponse(err, res)
-    if error is ""
-      search = JSON.parse(body)
-      if search.length > 0
-        promise.resolve(search["items"][0])
+  token = process.env.YOUTUBE_API_KEY
+  if (!token)
+    promise.reject("No Youtube API key configured.")
+  else
+    robot.http("https://www.googleapis.com/youtube/v3/search?part=snippet&q=#{search}&key=#{token}")
+    .get() (err, res, body) ->
+      error = handleWebResponse(err, res)
+      if error is ""
+        search = JSON.parse(body)
+        if search.length > 0
+          promise.resolve(search["items"][0])
+        else
+          promise.reject("No videos found.")
       else
-        promise.reject("No videos found.")
-    else
-      promise.reject(error)
+        promise.reject(error)
   return promise.promise
