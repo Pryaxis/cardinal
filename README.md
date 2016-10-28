@@ -25,7 +25,6 @@ Cardinal is a chat bot built on the [Hubot][hubot] framework. It was initially g
 ## Features Wanted
 
 * TShock deployment system?
-* Nuke (remove all messages by a given user)
 * Ban
 * Spam protection
 * Deployment updates
