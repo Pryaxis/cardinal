@@ -45,6 +45,7 @@ getPost = (robot, search) ->
     .get() (err, res, body) ->
       error = handleWebResponse(err, res)
       if error is ""
+        search = search.replace /\"\"([^\"]+)\"/g, "\"'$1'"
         search = JSON.parse(body)
         if search.length > 0
           promise.resolve(search["items"][0])
