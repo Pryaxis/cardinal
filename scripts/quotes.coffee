@@ -29,7 +29,7 @@ module.exports = (robot) ->
       robot.brain.set("quotes", quotes)
       robot.brain.save()
 
-  robot.respond /quote add (.*)/i, (msg) ->
+  robot.respond /quote add ([\S\s]*)/i, (msg) ->
     if brainLoaded
       quote = {who: msg.message.user['name'], quote: msg.match[1].trim()}
       quotes.push(quote)
