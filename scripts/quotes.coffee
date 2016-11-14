@@ -54,9 +54,8 @@ module.exports = (robot) ->
     if brainLoaded
       foundQuotes = []
       for index of quotes
-        if quotes[index].quote.indexOf(msg.match[1]) isnt -1
-          foundIndex = parseInt(index) + 1
-          foundQuotes.push(foundIndex)
+        if quotes[index].quote.toLowerCase().indexOf(msg.match[1].toLowerCase()) isnt -1
+          foundQuotes.push(++index)
       if foundQuotes.length > 1
         msg.send("Found #{foundQuotes.length} quotes: #{foundQuotes.join()}.")
       else if foundQuotes.length > 0
