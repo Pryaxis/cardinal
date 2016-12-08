@@ -23,9 +23,7 @@ module.exports = (robot) ->
     joiner = ', '
     name = msg.match[1].trim()
 
-    if name is "you"
-      msg.send "Who ain't I?"
-    else if name is robot.name
+    if name is robot.name
       msg.send "The best."
     else
       users = robot.brain.usersForFuzzyName(name)
@@ -42,6 +40,19 @@ module.exports = (robot) ->
         msg.send getAmbiguousUserText users
       else
         msg.send "#{name}? Never heard of 'em"
+
+  robot.respond /who are you\?*$/i, (msg) ->
+    msg.send "Who ain't I?"
+
+  robot.respond /who am i\?*$/i, (msg) ->
+    user = msg.user
+    user.roles = user.roles or [ ]
+    if user.roles.length > 0
+      if user.roles.join('').search(',') > -1
+        joiner = '; '
+      msg.send "You are #{user.roles.join(joiner)}."
+    else
+      msg.send "You are nothing to me."
 
   robot.respond /@?([\w .\-_]+) is (["'\w: \-_]+)[.!]*$/i, (msg) ->
     name    = msg.match[1].trim()
