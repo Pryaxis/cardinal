@@ -42,7 +42,7 @@ module.exports = (robot) ->
       quoteIndex = parseInt(msg.match[1])
       if quoteIndex > 0 and quoteIndex <= quotes.length
         quote = quotes[quoteIndex - 1]
-        msg.send("#{quote.quote} - Added by #{quote.who}")
+        msg.send("##{quoteIndex}: #{quote.quote} - _Added by #{quote.who}_")
       else
         msg.send("Invalid quote.")
 
