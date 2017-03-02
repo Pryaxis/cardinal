@@ -17,6 +17,8 @@
 
 brainLoaded = false
 quotes = []
+random = (min, max) -> 
+  Math.floor(Math.random() * (max - min + 1)) + min;
 
 module.exports = (robot) ->
   robot.brain.on 'loaded', ->
@@ -66,8 +68,9 @@ module.exports = (robot) ->
   robot.respond /quote random/i, (msg) ->
     if brainLoaded
       if quotes.length > 0
-        quote = msg.random(quotes)
-        msg.send("#{quote.quote} - Added by #{quote.who}")
+        quoteIndex = random(1, quotes.length)
+        quote = quotes[quoteIndex - 1]
+        msg.send("##{quoteIndex}: #{quote.quote} - _Added by #{quote.who}_")
       else
         msg.send("You have no quotes, nerd. (kappa)")
 
