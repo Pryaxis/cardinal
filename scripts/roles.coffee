@@ -58,8 +58,11 @@ module.exports = (robot) ->
     name    = msg.match[1].trim()
     newRole = msg.match[2].trim()
 
+    if name is 'what time'
+      return
+
     unless name in ['', 'who', 'what', 'where', 'when', 'why']
-      unless newRole.match(/^not\s+/i)
+      unless newRole.match(/^not\s+/i) or newRole.
         users = robot.brain.usersForFuzzyName(name)
         if users.length is 1
           user = users[0]
