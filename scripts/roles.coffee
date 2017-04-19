@@ -62,7 +62,7 @@ module.exports = (robot) ->
       return
 
     unless name in ['', 'who', 'what', 'where', 'when', 'why']
-      unless newRole.match(/^not\s+/i) or newRole.
+      unless newRole.match(/^not\s+/i)
         users = robot.brain.usersForFuzzyName(name)
         if users.length is 1
           user = users[0]
