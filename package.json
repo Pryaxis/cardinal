@@ -16,7 +16,7 @@
     "hubot-google-images": "^0.2.6",
     "hubot-google-translate": "^0.2.0",
     "hubot-help": "^0.2.0",
-    "hubot-heroku-keepalive": "1.0.2",
+    "hubot-heroku-keepalive": "0.0.4",
     "hubot-hipchat": "^2.12.0",
     "hubot-iss": "^2.0.0",
     "hubot-markov": "^2.0.0",
