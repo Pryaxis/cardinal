@@ -24,7 +24,7 @@ module.exports = (robot) ->
     name = msg.match[1].trim()
 
     if name is robot.name
-      msg.send "The best."
+      msg.send "I'm Maka Albarn, a two-star scythemeister at the Death Weapon Meister Academy (DWMA)."
     else
       users = robot.brain.usersForFuzzyName(name)
       if users.length is 1
